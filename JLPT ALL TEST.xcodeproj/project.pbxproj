@@ -30,29 +30,21 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		8601E0232D8D44C300A4FE14 /* Controller */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = Controller;
 			sourceTree = "<group>";
 		};
 		8601E02C2D8D44C600A4FE14 /* Model */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = Model;
 			sourceTree = "<group>";
 		};
 		8601E0352D8D44C800A4FE14 /* View */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = View;
 			sourceTree = "<group>";
 		};
 		866C7CE52D8DADFB00EF158B /* N1Audio */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = N1Audio;
 			sourceTree = "<group>";
 		};

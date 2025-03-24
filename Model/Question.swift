@@ -10,24 +10,31 @@ import Foundation
 struct Question: Identifiable, Codable {
     let id = UUID()
     var question: String?
-    var options: [String]  // 선택지 목록
+    var imageName: String?      // Moved up to be closer to the question
+    var imageURL: String?       // Moved up to be closer to the question
+    var options: [String]       // 선택지 목록
     var answer: String
     var tappedAnswer: String?
-    var imageName: String?
-    var imageURL: String?
-    var underline: [String]  // 문제 본문에서 밑줄을 적용할 단어 목록
+    var underline: [String]     // 문제 본문에서 밑줄을 적용할 단어 목록
 
     enum CodingKeys: String, CodingKey {
-        case id, question, options, answer, tappedAnswer, imageName, imageURL, underline
+        case id, question, imageName, imageURL, options, answer, tappedAnswer, underline
     }
 
-    init(question: String? = nil, options: [String], answer: String, tappedAnswer: String? = nil, imageName: String? = nil, imageURL: String? = nil, underline: [String] = []) {
+    init(question: String? = nil,
+         imageName: String? = nil,
+         imageURL: String? = nil,
+         options: [String],
+         answer: String,
+         tappedAnswer: String? = nil,
+         underline: [String] = []) {
+        
         self.question = question
+        self.imageName = imageName
+        self.imageURL = imageURL
         self.options = options
         self.answer = answer
         self.tappedAnswer = tappedAnswer
-        self.imageName = imageName
-        self.imageURL = imageURL
         self.underline = underline
     }
 }

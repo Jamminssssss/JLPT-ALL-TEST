@@ -195,7 +195,7 @@ class JLPTN5ViewController: UIViewController {
     }
     
     private func loadQuestions() {
-        questions = JLPTDataLoader2.JLPTN2loadLocalData()
+        questions = JLPTDataLoader1.JLPTN2loadLocalData()
     }
     
     private func displayQuestion() {
