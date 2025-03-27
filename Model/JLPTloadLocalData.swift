@@ -514,25 +514,67 @@ class JLPTDataLoader {
 class JLPTDataLoader1 {
     
     static func JLPTN2loadLocalData() -> [Question] {
-           return [
-               Question(
-                   question: "先生に貴重な資料を見せていただいた。",
-                   options: ["きじゅう", "きちょう", "きっじゅう", "きっちょう"],
-                   answer: "きちょう",
-                   underline: ["貴重"]
-               ),
-               Question(
-                   question: "彼女は毎日忙しくても、健康に気を使っている。",
-                   options: ["きづかう", "きおくする", "きりょうする", "きつける"],
-                   answer: "きづかう",
-                   underline: ["気を使う"]
-               ),
-               Question(
-                   question: "日本語を勉強していると、語彙力が増える。",
-                   options: ["ごいりょく", "ごいりょく", "ごいりょく", "ごいりょく"],
-                   answer: "ごいりょく",
-                   underline: ["語彙力"]
-            )
+        return [
+            Question(
+                question: "先生に貴重な資料を見せていただいた。",
+                options: ["きじゅう", "きちょう", "きっじゅう", "きっちょう"],
+                answer: "きちょう",
+                underline: ["貴重"]
+            ),
+            Question(
+                question: "その話を聞いて、とても怪しいと思った。",
+                options: ["むなしい", "くやしい", "おかしい", "あやしい"],
+                answer: "あやしい",
+                underline: ["怪しい"]
+            ),
+            Question(
+                question: "佐藤さんは容姿も性格もいい。",
+                options: ["よし", "ようし", "ようす", "よす"],
+                answer: "ようし",
+                underline: ["容姿"]
+            ),
+            Question(
+                question: "これは危険を伴う実験だ。",
+                options: ["はらう", "あつかう", "ともなう", "すくう"],
+                answer: "ともなう",
+                underline: ["伴う"]
+            ),
+            Question(
+                question: "以前は、海外で暮らしたいという願望が強かった。",
+                options: ["がんぼう", "げんぼう", "がんぼ", "げんぼ"],
+                answer: "げんぼう",
+                underline: ["願望"]
+            ),
+            Question(
+                question: "友人を家にまねいた。",
+                options: ["伯いた", "招いた", "泊いた", "召いた"],
+                answer: "招いた",
+                underline: ["まねいた"]
+            ),
+            Question(
+                question: "この商品は安全性がほしょうされている。",
+                options: ["補証", "保正", "保証", "補正"],
+                answer: "保証",
+                underline: ["ほしょう"]
+            ),
+            Question(
+                question: "この企業では、さまざまなもよおしを行っている。",
+                options: ["携し", "催し", "推し", "権し"],
+                answer: "催し",
+                underline: ["もよおし"]
+            ),
+            Question(
+                question: "銀行に行って、お札をこうかに替えた。",
+                options: ["硬貨", "固貨", "硬価", "固価"],
+                answer: "硬貨",
+                underline: ["こうか"]
+            ),
+            Question(
+                question: "わが社の商品はここでせいぞうされている。",
+                options: ["製増", "制増", "制造", "製造"],
+                answer: "製造",
+                underline: ["せいぞう"]
+            ),
         ]
     }
 }

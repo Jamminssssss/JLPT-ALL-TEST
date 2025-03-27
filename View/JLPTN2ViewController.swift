@@ -22,7 +22,7 @@ class JLPTN2ViewController: UIViewController {
     private var nextButton: UIButton!
     private var imageView: UIImageView!
     private let level: String = "N2"
-    private let quizGroup: String = "Group2" // 각 뷰에 대해 고유한 quizGroup 설정
+    private let quizGroup: String = "Group2"  // 예시로 그룹을 "Group1"으로 설정
     
     // 풀스크린 모드를 위한 오버라이드
     override var prefersStatusBarHidden: Bool {
@@ -48,8 +48,10 @@ class JLPTN2ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-            setupUI()
-            
+        
+        // UI 초기 설정
+        setupUI()
+        
         // 다크모드 변경 감지를 위한 트레이트 변경 등록
         registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
             if self.traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle {
@@ -57,17 +59,19 @@ class JLPTN2ViewController: UIViewController {
             }
         }
         
+        // 질문 데이터 로드
         loadQuestions()
-            
-            // First load the progress, then display the question
+        
+        // 진행 상황 로드 후 질문 표시
         currentIndex = DatabaseManager.shared.loadProgress(level: level, quizGroup: quizGroup)
-
-            // Make sure currentIndex is valid
-            if currentIndex >= questions.count {
-                currentIndex = 0 // Reset if saved progress is invalid
-            }
-            
-            displayQuestion()
+        
+        // 현재 인덱스 유효성 검사
+        if currentIndex >= questions.count {
+            currentIndex = 0 // 저장된 진행 상황이 유효하지 않은 경우 리셋
+        }
+        
+        // 질문 화면 표시
+        displayQuestion()
     }
     
     // 이미지 탭 처리를 위한 메서드 추가
@@ -79,7 +83,6 @@ class JLPTN2ViewController: UIViewController {
         fullscreenVC.modalPresentationStyle = .fullScreen // 이미지 뷰 컨트롤러도 풀스크린으로 설정
         present(fullscreenVC, animated: true)
     }
-    
     
     // 뷰가 나타날 때 호출되는 메서드
     override func viewWillAppear(_ animated: Bool) {
@@ -125,17 +128,17 @@ class JLPTN2ViewController: UIViewController {
         
         return attributedText
     }
-
+    
     // ✅ UI 업데이트 메서드 (다크 모드 & 라이트 모드 지원)
     private func updateUIForTheme() {
         let isDarkMode = traitCollection.userInterfaceStyle == .dark
-
+        
         view.backgroundColor = isDarkMode ? .black : .white
         contentView.backgroundColor = isDarkMode ? .black : .white
-
+        
         questionLabel.textColor = isDarkMode ? .white : .black
         progressLabel.textColor = isDarkMode ? .lightGray : .darkGray
-
+        
         closeButton.setTitleColor(isDarkMode ? .orange : .red, for: .normal)
         
         nextButton.backgroundColor = isDarkMode ? .darkGray : .blue
@@ -230,59 +233,66 @@ class JLPTN2ViewController: UIViewController {
         contentView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         
-        // 스크롤뷰가 화면 전체를 채우도록 설정 (SafeArea 무시)
+        // 스크롤뷰 설정
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor), // SafeArea 대신 view에 직접 제약
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         
-        // 콘텐츠 뷰 설정 - 양쪽 여백 최소화
+        // 콘텐츠 뷰 설정 - 최소 높이 추가
         NSLayoutConstraint.activate([
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.heightAnchor) // 높이 최소값 추가
         ])
         
-        // UI 요소들의 제약조건 - 여백 최소화
         NSLayoutConstraint.activate([
-            // 닫기 버튼을 오른쪽 상단 모서리에 작게 배치
             closeButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             closeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
             closeButton.widthAnchor.constraint(equalToConstant: 40),
             closeButton.heightAnchor.constraint(equalToConstant: 40),
             
-            // 진행률 라벨을 왼쪽 상단에 작게 배치
             progressLabel.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor),
             progressLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
             
-            // 문제 텍스트를 더 위쪽에 배치하고 여백 최소화
-            questionLabel.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 10),
-            questionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-            questionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-            
-            // 이미지뷰를 더 크게 만들고 문제 바로 아래 배치
-            imageView.topAnchor.constraint(equalTo: questionLabel.bottomAnchor, constant: 10),
-            imageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            imageView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.9),
-            imageView.heightAnchor.constraint(equalToConstant: 220),
-            
-            // 옵션 스택뷰를 더 크게 만들고 여백 최소화
-            optionsStackView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 15),
-            optionsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-            optionsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-            
-            // 다음 버튼 배치 - 이제 스택뷰와 같은 제약 조건 사용
-            nextButton.topAnchor.constraint(equalTo: optionsStackView.bottomAnchor, constant: 15),
-            nextButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-            nextButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-            nextButton.heightAnchor.constraint(equalToConstant: 60),
-            nextButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15)
+            questionLabel.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 20),
+            questionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            questionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
         ])
+        
+        // 이미지뷰 제약조건 수정 - 높이를 비율로 설정
+        NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: questionLabel.bottomAnchor, constant: 20),
+            imageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            imageView.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor, multiplier: 0.9),
+            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 3/4) // 비율 설정
+        ])
+        
+        NSLayoutConstraint.activate([
+            optionsStackView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20),
+            optionsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            optionsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            optionsStackView.bottomAnchor.constraint(lessThanOrEqualTo: nextButton.topAnchor, constant: -20), // 여백 최소화
+            
+            nextButton.topAnchor.constraint(equalTo: optionsStackView.bottomAnchor, constant: 20),
+            nextButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            nextButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            nextButton.heightAnchor.constraint(equalToConstant: 60),
+            nextButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 200), // 최소 너비 설정
+            nextButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+        ])
+        
+        // 이미지뷰 디자인 설정
+        imageView.layer.borderWidth = 1
+        imageView.layer.borderColor = UIColor.lightGray.cgColor
+        imageView.layer.cornerRadius = 12
     }
+    
     
     private func loadQuestions() {
         questions = JLPTDataLoader1.JLPTN2loadLocalData()
@@ -325,6 +335,11 @@ class JLPTN2ViewController: UIViewController {
             button.layer.cornerRadius = 12
             button.heightAnchor.constraint(equalToConstant: 60).isActive = true
             
+            // 버튼에 박스 효과 추가
+            button.layer.borderWidth = 1
+            button.layer.borderColor = UIColor.darkGray.cgColor
+            button.layer.cornerRadius = 12
+            
             // 버튼에 자동 줄 바꿈을 허용하도록 설정
             button.titleLabel?.numberOfLines = 0
             button.titleLabel?.lineBreakMode = .byWordWrapping
@@ -342,14 +357,16 @@ class JLPTN2ViewController: UIViewController {
         
         if selectedOption == correctAnswer {
             sender.backgroundColor = .green
-            score += 1
+            sender.setTitleColor(.black, for: .normal) // 검정색 텍스트로 변경
         } else {
             sender.backgroundColor = .red
-            // 정답 표시 추가 (선택사항)
+            sender.setTitleColor(.white, for: .normal) // 실패한 옵션은 흰색 텍스트 유지
+            
+            // 정답 표시 추가
             optionsStackView.arrangedSubviews.forEach { view in
                 if let button = view as? UIButton, button.attributedTitle(for: .normal)?.string == correctAnswer {
                     button.backgroundColor = .green
-                    button.setTitleColor(.white, for: .normal)
+                    button.setTitleColor(.black, for: .normal) // 정답도 검정색 텍스트로 변경
                 }
             }
         }
