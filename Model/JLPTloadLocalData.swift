@@ -575,6 +575,58 @@ class JLPTDataLoader1 {
                 answer: "製造",
                 underline: ["せいぞう"]
             ),
+            Question(
+                question: "（ ）に入れるのに最もよいものを、一つ選びなさい。\n男女の結婚（ ）の違いについて調べた。",
+                options: ["観", "識", "念", "察"],
+                answer: "観"
+            ),
+            Question(
+                question: "ここでは（ ）水準の医療が受けられる。",
+                options: ["頂", "上", "高", "特"],
+                answer: "高"
+            ),
+            Question(
+                question: "今日は大学の講義で日本（ ）の経営について学んだ。",
+                options: ["状", "類", "式", "則"],
+                answer: "式"
+            ),
+            Question(
+                question: "開封しても、（ ）使用の物は返品可能です。",
+                options: ["外", "否", "前", "未"],
+                answer: "未"
+            ),
+            Question(
+                question: "受験生なので、勉強（ ）の毎日だ。",
+                options: ["漬け", "浸し", "溶け", "満ち"],
+                answer: "漬け"
+            ),
+        ]
+    }
+}
+
+
+class JLPTDataLoader2 {
+    
+    static func JLPTN3loadLocalData() -> [Question] {
+        return [
+            Question(
+                question: "__のことばの読み方として最もよいものを、一つえらびなさい。\n会場には大勢の観客がいた。",
+                options: ["けんぎゃく", "かんぎゃく", "けんきゃく", "かんきゃく"],
+                answer: "かんきゃく",
+                underline: ["観客"]
+            ),
+            Question(
+                question: "田村さんが払ってくれました。",
+                options: ["くばって", "はらって", "かざって", "ひろって"],
+                answer: "はらって",
+                underline: ["払って"]
+            ),
+            Question(
+                question: "ホテルには３時ごろ到着します。",
+                options: ["とうちゃく", "とうつく", "とちゃく", "とつく"],
+                answer: "とうちゃく",
+                underline: ["到着"]
+            ),
         ]
     }
 }

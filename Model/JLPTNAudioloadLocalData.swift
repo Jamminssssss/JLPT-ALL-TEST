@@ -10,7 +10,6 @@ import Foundation
 struct JLPTAudioDataLoader {
     
     static func JLPTN1AudioloadLocalData() -> [AudioQuestion] {
-        // Return sample data with the correct parameter order
         return [
             AudioQuestion(
                 question: "1番",
@@ -54,26 +53,37 @@ struct JLPTAudioDataLoader {
 
 struct JLPTAudioDataLoader1 {
     static func JLPTN2AudioloadLocalData() -> [AudioQuestion] {
-        // Return sample data with the correct parameter order
         return [
             AudioQuestion(
-                question: "테스트",
-                options: ["商品を補充する","さくら店に商品を送る","ダイレクトメールの発送の準備をする","店で使用するかざりを作る"],
-                answer: "商品を補充する",
-                audioFileName: "N1Q1.mp3"
+                question: "1番",
+                options: ["先週の会議の記録を作成する","調査結果を入力する","林さんに電話をする","プレゼンのしりょうを作成する"],
+                answer: "先週の会議の記録を作成する",
+                audioFileName: "n2q1.mp3"
             ),
             AudioQuestion(
                 question: "2番",
-                options: ["体験者のビデオを見る","先生にすいせんじょうを依頼する","保険の加入手続きをする","指定科目の成績をかくにんする"],
-                answer: "指定科目の成績をかくにんする",
-                audioFileName: "N1Q2.mp3"
+                options: ["2000円","1000円","900円","100円"],
+                answer: "1000円",
+                audioFileName: "n2q2.mp3"
             ),
             AudioQuestion(
                 question: "3番",
-                options: ["見積もりの合計金額を見直す","見積もり金額の内訳を詳しく書く","バスが確保できたかかくにんする","見積書の有効期限を書く"],
-                answer: "見積もり金額の内訳を詳しく書く",
-                audioFileName: "N1Q3.mp3"
-            )
+                options: ["ちゅうりんじょうで張り紙を見る","大学でしんせいしょのじゅんびをする","市役所にしんせいしょを取りに行く","市役所でがくせいしょうをコピーする"],
+                answer: "大学でしんせいしょのじゅんびをする",
+                audioFileName: "n2q3.mp3"
+            ),
+            AudioQuestion(
+                question: "4番",
+                options: ["インターネットで店をさがす","木村さんに道具を借りる","アウトドア用品の店で道具を買う","初心者向けのこうざに参加する"],
+                answer: "初心者向けのこうざに参加する",
+                audioFileName: "n2q4.mp3"
+            ),
+            AudioQuestion(
+                question: "5番",
+                options: ["工場の かんりのじょうきょうを 調べる","けいやくのうかに じょうきょうを聞く","運送会社にじょうきょうを聞く","そうこの ほぞんじょうきょうを 調べる"],
+                answer: "運送会社にじょうきょうを聞く",
+                audioFileName: "n2q5.mp3"
+            ),
         ]
     }
 }

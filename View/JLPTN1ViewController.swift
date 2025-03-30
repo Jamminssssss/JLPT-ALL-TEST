@@ -23,7 +23,9 @@ class JLPTN1ViewController: UIViewController {
     private var imageView: UIImageView!
     private let level: String = "N1"
     private let quizGroup: String = "Group1"  // 예시로 그룹을 "Group1"으로 설정
-    
+    private var questionToOptionsConstraint: NSLayoutConstraint!
+    private var questionToImageConstraint: NSLayoutConstraint!
+    private var imageToOptionsConstraint: NSLayoutConstraint!
     // 풀스크린 모드를 위한 오버라이드
     override var prefersStatusBarHidden: Bool {
         return true // 상태 표시줄 완전히 숨기기
@@ -233,6 +235,11 @@ class JLPTN1ViewController: UIViewController {
         contentView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         
+        
+        questionToOptionsConstraint = optionsStackView.topAnchor.constraint(equalTo: questionLabel.bottomAnchor, constant: 10)
+        questionToImageConstraint = imageView.topAnchor.constraint(equalTo: questionLabel.bottomAnchor, constant: 20)
+        imageToOptionsConstraint = optionsStackView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20)
+        
         // 스크롤뷰 설정
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -309,13 +316,34 @@ class JLPTN1ViewController: UIViewController {
         // 문제 텍스트에 밑줄 적용
         questionLabel.attributedText = applyUnderline(to: question.question ?? "", underlinedWords: question.underline)
         
+        // 먼저 모든 잠재적 충돌 제약 조건을 비활성화
+        NSLayoutConstraint.deactivate([
+            questionToOptionsConstraint,
+            questionToImageConstraint,
+            imageToOptionsConstraint
+        ])
+        
         // 이미지 표시 (이미지가 있는 경우에만)
-        if let imageName = question.imageName, let image = UIImage(named: imageName) {
-            imageView.image = image
-            imageView.isHidden = false
-        } else {
-            imageView.isHidden = true
-        }
+          if let imageName = question.imageName, let image = UIImage(named: imageName) {
+              imageView.image = image
+              imageView.isHidden = false
+              
+              // Only activate image-related constraints (NOT the direct question-to-options constraint)
+              NSLayoutConstraint.activate([
+                  questionToImageConstraint,
+                  imageToOptionsConstraint
+              ])
+          } else {
+              imageView.isHidden = true
+              
+              // Only activate the direct question-to-options constraint when no image
+              NSLayoutConstraint.activate([
+                  questionToOptionsConstraint
+              ])
+          }
+          
+          // Force layout update
+          view.layoutIfNeeded()
         
         progress = CGFloat(currentIndex) / CGFloat(questions.count - 1)
         progressLabel.text = String(format: "%.0f%%", progress * 100)

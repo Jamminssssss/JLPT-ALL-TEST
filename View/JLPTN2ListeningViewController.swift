@@ -1,10 +1,3 @@
-//
-//  JLPTN2ListeningViewController.swift
-//  JLPT ALL TEST
-//
-//  Created by JeaminPark on 3/22/25.
-//
-
 import UIKit
 import AVFoundation
 
@@ -32,14 +25,22 @@ class JLPTN2ListeningViewController: UIViewController {
     private var forwardButton: UIButton!
     private var optionsStackView: UIStackView!
     private var nextButton: UIButton!
-    
+    private var imageView: UIImageView!
     private let level: String = "N2Audio"
     private let quizGroup: String = "Group4"  // 예시로 그룹을 "Group1"으로 설정
+    
     
     // MARK: - Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
+                if self.traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle {
+                    self.updateUIForTheme()
+                }
+            }
+        
         setupActions()
         loadQuestions()
 
@@ -55,6 +56,23 @@ class JLPTN2ListeningViewController: UIViewController {
         }
     }
     
+    // 뷰 컨트롤러 초기화 시 프레젠테이션 스타일 설정
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        configureFullScreenMode()
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        configureFullScreenMode()
+    }
+    
+    // 풀스크린 모드 설정 메서드
+    private func configureFullScreenMode() {
+        // 초기화 시 풀스크린 모드 설정
+        self.modalPresentationStyle = .fullScreen
+    }
+    
     override var prefersStatusBarHidden: Bool {
         return true // 상태 표시줄 숨기기
     }
@@ -62,10 +80,26 @@ class JLPTN2ListeningViewController: UIViewController {
     // 뷰가 나타날 때 호출되는 메서드
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // 전체화면 모드 설정
-        self.modalPresentationStyle = .fullScreen
-        // 상태 표시줄 숨기기 위한 설정
-        setNeedsStatusBarAppearanceUpdate()
+        
+        // iOS 13 이상에서 풀스크린 모드 강제 적용
+        if #available(iOS 13.0, *) {
+            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+            windowScene?.windows.first?.overrideUserInterfaceStyle = .light // 또는 .dark로 테마 강제 설정
+            
+            // 상태바 숨기기
+            if let statusBarManager = windowScene?.statusBarManager {
+                if statusBarManager.isStatusBarHidden == false {
+                    setNeedsStatusBarAppearanceUpdate()
+                }
+            }
+        }
+        
+        // 안전 영역 무시 설정
+        setNeedsUpdateOfHomeIndicatorAutoHidden() // 홈 인디케이터 자동 숨김
+        view.insetsLayoutMarginsFromSafeArea = false // 안전 영역 무시
+        
+        // 상태바와 네비게이션바 숨기기
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -73,8 +107,35 @@ class JLPTN2ListeningViewController: UIViewController {
         audioPlayer.stopAudio()
     }
     
+ 
+
+      // ✅ UI 업데이트 메서드 (다크 모드 & 라이트 모드 지원)
+      private func updateUIForTheme() {
+          let isDarkMode = traitCollection.userInterfaceStyle == .dark
+
+          view.backgroundColor = isDarkMode ? .black : .white
+          contentView.backgroundColor = isDarkMode ? .black : .white
+
+          questionLabel.textColor = isDarkMode ? .white : .black
+          progressLabel.textColor = isDarkMode ? .lightGray : .darkGray
+
+          closeButton.setTitleColor(isDarkMode ? .orange : .red, for: .normal)
+          
+          nextButton.backgroundColor = isDarkMode ? .darkGray : .blue
+          nextButton.setTitleColor(isDarkMode ? .white : .white, for: .normal)
+          
+          optionsStackView.arrangedSubviews.forEach { view in
+              if let button = view as? UIButton {
+                  button.backgroundColor = isDarkMode ? .darkGray : .lightGray
+                  button.setTitleColor(isDarkMode ? .white : .black, for: .normal)
+              }
+          }
+      }
+    
     // MARK: - Setup Methods
     private func setupUI() {
+        // 풀스크린 설정 강화
+        view.frame = UIScreen.main.bounds // 전체 화면 영역으로 설정
         view.backgroundColor = .white
         
         // 스크롤뷰 설정
@@ -162,6 +223,7 @@ class JLPTN2ListeningViewController: UIViewController {
         contentView.addSubview(nextButton)
         
         setupConstraints()
+        updateUIForTheme() // ✅ UI 테마 적용
     }
     
     private func setupConstraints() {
