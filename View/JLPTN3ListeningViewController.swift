@@ -36,6 +36,29 @@ class JLPTN3ListeningViewController: UIViewController {
     private let level: String = "N3Audio"
     private let quizGroup: String = "Group6"  // 예시로 그룹을 "Group1"으로 설정
     
+    
+    // 풀스크린 모드를 위한 오버라이드
+    override var prefersStatusBarHidden: Bool {
+        return true // 상태 표시줄 완전히 숨기기
+    }
+    
+    // 뷰 컨트롤러 초기화 시 프레젠테이션 스타일 설정
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        configureFullScreenMode()
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        configureFullScreenMode()
+    }
+    
+    // 풀스크린 모드 설정 메서드
+    private func configureFullScreenMode() {
+        // 초기화 시 풀스크린 모드 설정
+        self.modalPresentationStyle = .fullScreen
+    }
+    
     // MARK: - Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,22 +78,40 @@ class JLPTN3ListeningViewController: UIViewController {
         }
     }
     
-    override var prefersStatusBarHidden: Bool {
-        return true // 상태 표시줄 숨기기
+    // 이미지 탭 처리를 위한 메서드 추가
+    @objc private func imageTapped(_ gesture: UITapGestureRecognizer) {
+        guard let tappedImageView = gesture.view as? UIImageView,
+              let image = tappedImageView.image else { return }
+        
+        let fullscreenVC = FullscreenImageViewController(image: image)
+        fullscreenVC.modalPresentationStyle = .fullScreen // 이미지 뷰 컨트롤러도 풀스크린으로 설정
+        present(fullscreenVC, animated: true)
     }
+    
     
     // 뷰가 나타날 때 호출되는 메서드
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // 전체화면 모드 설정
-        self.modalPresentationStyle = .fullScreen
-        // 상태 표시줄 숨기기 위한 설정
-        setNeedsStatusBarAppearanceUpdate()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        audioPlayer.stopAudio()
+        
+        // iOS 13 이상에서 풀스크린 모드 강제 적용
+        if #available(iOS 13.0, *) {
+            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+            windowScene?.windows.first?.overrideUserInterfaceStyle = .light // 또는 .dark로 테마 강제 설정
+            
+            // 상태바 숨기기
+            if let statusBarManager = windowScene?.statusBarManager {
+                if statusBarManager.isStatusBarHidden == false {
+                    setNeedsStatusBarAppearanceUpdate()
+                }
+            }
+        }
+        
+        // 안전 영역 무시 설정
+        setNeedsUpdateOfHomeIndicatorAutoHidden() // 홈 인디케이터 자동 숨김
+        view.insetsLayoutMarginsFromSafeArea = false // 안전 영역 무시
+        
+        // 상태바와 네비게이션바 숨기기
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     // MARK: - Setup Methods
@@ -114,6 +155,11 @@ class JLPTN3ListeningViewController: UIViewController {
         questionImageView.contentMode = .scaleAspectFit
         questionImageView.isHidden = true
         contentView.addSubview(questionImageView)
+        
+        // 여기에 아래 코드 추가
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
+        questionImageView.isUserInteractionEnabled = true
+        questionImageView.addGestureRecognizer(tapGesture)
         
         // 오디오 진행바
         audioProgressView = UIProgressView(progressViewStyle: .default)
@@ -350,7 +396,7 @@ class JLPTN3ListeningViewController: UIViewController {
     // MARK: - Data Methods
     private func loadQuestions() {
         // Load questions from the data loader
-        audioQuestions = JLPTAudioDataLoader1.JLPTN2AudioloadLocalData()
+        audioQuestions = JLPTAudioDataLoader2.JLPTN3AudioloadLocalData()
     }
     
     private func displayQuestion(at index: Int) {
@@ -361,6 +407,26 @@ class JLPTN3ListeningViewController: UIViewController {
         // Set question text
         questionLabel.text = question.question ?? "청취 후 가장 적절한 답을 고르세요."
         
+        // Handle image display - add this code
+        if let imageName = question.imageName, !imageName.isEmpty {
+            questionImageView.image = UIImage(named: imageName)
+            questionImageView.isHidden = false
+        } else if let imageURLString = question.imageURL, !imageURLString.isEmpty,
+                  let imageURL = URL(string: imageURLString) {
+            // Load image from URL (consider using a library like SDWebImage or Kingfisher for better performance)
+            DispatchQueue.global().async {
+                if let data = try? Data(contentsOf: imageURL),
+                   let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        self.questionImageView.image = image
+                        self.questionImageView.isHidden = false
+                    }
+                }
+            }
+        } else {
+            questionImageView.isHidden = true
+        }
+        
         // Configure answer options
         setupOptionsButtons(with: question.options)
         
@@ -369,7 +435,7 @@ class JLPTN3ListeningViewController: UIViewController {
         progressLabel.text = String(format: "%.0f%%", progress * 100)
         
         // Reset UI state
-        nextButton.isHidden = true // 옵션을 선택하기 전에는 다음 버튼 숨김
+        nextButton.isHidden = true
         audioProgressView.progress = 0.0
         updatePlayButtonImage(isPlaying: false)
     }
@@ -427,6 +493,15 @@ class JLPTN3ListeningViewController: UIViewController {
         
         // Show and style the next button to match option buttons
         nextButton.isHidden = false
+    }
+    
+    @objc private func closeView() {
+        // 풀스크린 모드로 보여진 뷰 컨트롤러를 닫을 때
+        // iOS 13부터 프레젠테이션 스타일이 변경될 수 있으므로 명시적으로 설정
+        if #available(iOS 13.0, *) {
+            self.isModalInPresentation = false
+        }
+        dismiss(animated: true, completion: nil) // 뷰 컨트롤러 닫기
     }
     
     // MARK: - Result Methods

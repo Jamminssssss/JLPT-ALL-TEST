@@ -87,3 +87,42 @@ struct JLPTAudioDataLoader1 {
         ]
     }
 }
+
+struct JLPTAudioDataLoader2 {
+    static func JLPTN3AudioloadLocalData() -> [AudioQuestion] {
+        return [
+            AudioQuestion(
+                question: "1ばん",
+                imageName: "JlptListeningImgae1.png",
+                options: ["アウ","アエ","イウ","イエ"],
+                answer: "アエ",
+                audioFileName: "n3q1.mp3"
+            ),
+            AudioQuestion(
+                question: "2ばん",
+                options: ["水曜日","木曜日","金曜日","土曜日"],
+                answer: "金曜日",
+                audioFileName: "n3q2.mp3"
+            ),
+            AudioQuestion(
+                question: "3ばん",
+                options: ["さんかしゃを かくにんする","店に電話する","メールをかくにんする","ないようを決める"],
+                answer: "さんかしゃを かくにんする",
+                audioFileName: "n3q3.mp3"
+            ),
+            AudioQuestion(
+                question: "4ばん",
+                options: ["セミナーにもうしこむ","テストをうける","けいじばんを見る","さんかひをふりこむ"],
+                answer: "テストをうける",
+                audioFileName: "n3q4.mp3"
+            ),
+            AudioQuestion(
+                question: "5ばん",
+                options: ["ちょうさけっかを入力する","サンプルをしてんに送る","かいぎのじゅんびをする","大野さんに仕事をたのむ"],
+                answer: "ちょうさけっかを入力する",
+                audioFileName: "n3q5.mp3"
+            ),
+        ]
+    }
+}
+

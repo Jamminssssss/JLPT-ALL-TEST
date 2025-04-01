@@ -606,7 +606,6 @@ class JLPTDataLoader1 {
 
 
 class JLPTDataLoader2 {
-    
     static func JLPTN3loadLocalData() -> [Question] {
         return [
             Question(
@@ -626,6 +625,72 @@ class JLPTDataLoader2 {
                 options: ["とうちゃく", "とうつく", "とちゃく", "とつく"],
                 answer: "とうちゃく",
                 underline: ["到着"]
+            ),
+            Question(
+                question: "山下さんが説明を加えました。",
+                options: ["つたえました", "おえました", "くわえました", "かえました"],
+                answer: "くわえました",
+                underline: ["加えました"]
+            ),
+            Question(
+                question: "今から訓練を行います。",
+                options: ["くんれい", "くんれん", "ぐんれい", "ぐんれん"],
+                answer: "くわえました",
+                underline: ["訓練"]
+            ),
+            Question(
+                question: "この豆はスープに使うといいですよ。",
+                options: ["こな", "いも", "かい", "まめ"],
+                answer: "まめ",
+                underline: ["豆"]
+            ),
+            Question(
+                question: "社会には共通のルールがあります。",
+                options: ["きょうつ", "こうつう", "きょうつう", "こうつ"],
+                answer: "きょうつう",
+                underline: ["共通"]
+            ),
+            Question(
+                question: "来年から税金が上がるそうだ。",
+                options: ["ぜいきん", "ぜっきん", "せいきん", "せっきん"],
+                answer: "ぜいきん",
+                underline: ["税金"]
+            ),
+            Question(
+                question: "__のことばを漢字で書くとき、最もよいものを、一つえらびなさい。\nしばらく、きれいななみを見ていた。",
+                options: ["池", "湖", "港", "波"],
+                answer: "波",
+                underline: ["なみ"]
+            ),
+            Question(
+                question: "もう少しはやく歩きましょう。",
+                options: ["軽く", "急く", "速く", "進く"],
+                answer: "速く",
+                underline: ["はやく"]
+            ),
+            Question(
+                question: "わたしは今の生活にまんぞくしている。",
+                options: ["満続", "万続", "満足", "万足"],
+                answer: "満足",
+                underline: ["まんぞく"]
+            ),
+            Question(
+                question: "父は腕をくんで何か考えていた。",
+                options: ["接んで", "組んで", "折んで", "結んで"],
+                answer: "組んで",
+                underline: ["くんで"]
+            ),
+            Question(
+                question: "この国は主に米をゆしゅつしている。",
+                options: ["輸出", "諭出", "輪出", "論出"],
+                answer: "輸出",
+                underline: ["ゆしゅつ"]
+            ),
+            Question(
+                question: "赤ちゃんが母親に抱かれてねむっています。",
+                options: ["寝って", "宿って", "眼って", "眠って"],
+                answer: "眠って",
+                underline: ["ねむって"]
             ),
         ]
     }

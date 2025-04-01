@@ -61,6 +61,11 @@
 			path = N2Audio;
 			sourceTree = "<group>";
 		};
+		86CFA5722D9C137600AA7D12 /* N3Audio */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = N3Audio;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,10 +91,11 @@
 		86A664D32D8C4FC300837F5D = {
 			isa = PBXGroup;
 			children = (
+				8601E02C2D8D44C600A4FE14 /* Model */,
+				86CFA5722D9C137600AA7D12 /* N3Audio */,
 				86CFA0B72D96F50C00AA7D12 /* N2Audio */,
 				866C7CE52D8DADFB00EF158B /* N1Audio */,
 				8601E0352D8D44C800A4FE14 /* View */,
-				8601E02C2D8D44C600A4FE14 /* Model */,
 				8601E0232D8D44C300A4FE14 /* Controller */,
 				86A664DE2D8C4FC300837F5D /* JLPT ALL TEST */,
 				86A664DD2D8C4FC300837F5D /* Products */,
@@ -138,6 +144,7 @@
 				866C7CE52D8DADFB00EF158B /* N1Audio */,
 				86A664DE2D8C4FC300837F5D /* JLPT ALL TEST */,
 				86CFA0B72D96F50C00AA7D12 /* N2Audio */,
+				86CFA5722D9C137600AA7D12 /* N3Audio */,
 			);
 			name = "JLPT ALL TEST";
 			productName = "JLPT ALL TEST";
